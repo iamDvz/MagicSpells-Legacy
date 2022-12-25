@@ -10,20 +10,20 @@ import com.nisovin.magicspells.MagicSpells;
 
 public class NoMagicZoneResidence extends NoMagicZone {
 
-	private String regionName;
-	
+	//private String regionName;
+	//
 	@Override
 	public void initialize(ConfigurationSection config) {
-		this.regionName = config.getString("region", "");
+	//	this.regionName = config.getString("region", "");
 	}
 
 	@Override
 	public boolean inZone(Location location) {
-		if (CompatBasics.pluginEnabled("Residence")) {
-			ClaimedResidence res = Residence.getResidenceManager().getByLoc(location);
-			return res != null && res.getName().equalsIgnoreCase(this.regionName);
-		}
-		MagicSpells.error("Failed to access Residence region '" + this.regionName + '\'');
+	//	if (CompatBasics.pluginEnabled("Residence")) {
+	//		ClaimedResidence res = Residence.getResidenceManager().getByLoc(location);
+	//		return res != null && res.getName().equalsIgnoreCase(this.regionName);
+	//	}
+	//	MagicSpells.error("Failed to access Residence region '" + this.regionName + '\'');
 		return false;
 	}
 

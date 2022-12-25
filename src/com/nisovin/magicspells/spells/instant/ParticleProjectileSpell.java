@@ -83,6 +83,7 @@ public class ParticleProjectileSpell extends InstantSpell implements TargetedLoc
 	boolean hitAirAfterDuration;
 	boolean stopOnHitEntity;
 	boolean stopOnHitGround;
+	boolean changePitch;
 	ValidTargetList targetList;
 
 	Subspell airSpell;
@@ -175,6 +176,7 @@ public class ParticleProjectileSpell extends InstantSpell implements TargetedLoc
 		this.hitAirAfterDuration = getConfigBoolean("hit-air-after-duration", false);
 		this.stopOnHitGround = getConfigBoolean("stop-on-hit-ground", true);
 		this.stopOnHitEntity = getConfigBoolean("stop-on-hit-entity", true);
+		this.changePitch = getConfigBoolean("change-pitch", true);
 		if (this.stopOnHitEntity) this.maxEntitiesHit = 1;
 
 		// Target List
@@ -286,6 +288,7 @@ public class ParticleProjectileSpell extends InstantSpell implements TargetedLoc
 			this.startLocation = from.clone();
 			// Changing the start location
 			this.startDirection = caster.getLocation().getDirection().normalize();
+
 			Vector horizOffset = new Vector(-startDirection.getZ(), 0.0, startDirection.getX()).normalize();
 			this.startLocation.add(horizOffset.multiply(startZOffset)).getBlock().getLocation();
 			this.startLocation.add(this.startLocation.getDirection().multiply(startXOffset));
@@ -297,7 +300,13 @@ public class ParticleProjectileSpell extends InstantSpell implements TargetedLoc
 
 			if (projectileHorizOffset != 0) Util.rotateVector(this.currentVelocity, projectileHorizOffset);
 			if (projectileVertOffset != 0) this.currentVelocity.add(new Vector(0, projectileVertOffset, 0)).normalize();
-			if (projectileSpread > 0) this.currentVelocity.add(new Vector(rand.nextFloat() * projectileSpread, rand.nextFloat() * projectileSpread, rand.nextFloat() * projectileSpread));
+			if (!changePitch) this.currentVelocity = new Vector(this.currentVelocity.getX(), projectileVertOffset, this.currentVelocity.getZ()).normalize();
+			if (ParticleProjectileSpell.this.projectileSpread > 0.0F) {
+				this.currentVelocity.add(new Vector(
+						(-1 + rand.nextFloat() * 2) *  ParticleProjectileSpell.this.projectileSpread,
+						(-1 + rand.nextFloat() * 2) *  ParticleProjectileSpell.this.projectileSpread,
+						(-1 + rand.nextFloat() * 2) *  ParticleProjectileSpell.this.projectileSpread));
+			}
 			if (hugSurface) {
 				this.currentLocation.setY(this.currentLocation.getY() + heightFromSurface);
 				this.currentVelocity.setY(0).normalize();

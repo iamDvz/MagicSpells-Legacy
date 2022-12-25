@@ -107,8 +107,8 @@ public class MSConfig {
   // Resource retrieving
   def resourceResidenceUrl = 'http://nexus.hc.to/content/repositories/pub_releases/com/bekvon/bukkit/residence/Residence/4.5.3.0/Residence-4.5.3.0.jar'
   def resourceNcpUrl = 'https://ci.md-5.net/job/NoCheatPlus/lastSuccessfulBuild/artifact/target/NoCheatPlus.jar'
-  def resourcePlaceholderapiUrl = 'http://repo.extendedclip.com/content/repositories/placeholderapi/me/clip/placeholderapi/2.8.2/placeholderapi-2.8.2.jar'
-  def resourceGriefPreventionUrl = 'https://github.com/TechFortress/GriefPrevention/releases/download/16.8/GriefPrevention.jar'
+  //def resourcePlaceholderapiUrl = 'https://cdn.discordapp.com/attachments/999405749081997332/1056645447281807501/PlaceholderAPI-2.11.2.jar'
+  def resourceGriefPreventionUrl = 'https://github.com/TechFortress/GriefPrevention/releases/download/16.18/GriefPrevention.jar'
 
   def versionSuffix
 
@@ -142,7 +142,7 @@ def magicspellsGetResources() {
   downloadFile(new File(libFolder, 'NoCheatPlus.jar'), new URL(project.ext.magicspellsData.resourceNcpUrl))
 
   // Get PlaceholderAPI
-  downloadFile(new File(libFolder, 'PlaceholderAPI.jar'), new URL(project.ext.magicspellsData.resourcePlaceholderapiUrl))
+  //downloadFile(new File(libFolder, 'PlaceholderAPI.jar'), new URL(project.ext.magicspellsData.resourcePlaceholderapiUrl))
 
   // Get GriefPrevention
   downloadFile(new File(libFolder, 'GriefPrevention.jar'), new URL(project.ext.magicspellsData.resourceGriefPreventionUrl))
@@ -150,19 +150,11 @@ def magicspellsGetResources() {
   println 'Finished running the get resources phase'
 }
 
-task getResidence(type: Download) {
-    dest new File(project.file(project.ext.magicspellsData.libDir), 'Residence.jar')
-    src 'http://ltcraft.lt/Residence/download.php?file=Residence4.5.3.0.jar'
-    overwrite false
-}
 
 // FIXME this should not be run at configuration time
 //magicspellsGetResources()
 task downloadDependencies() {
     group = 'Setup'
-    dependsOn = [
-        'getResidence'
-    ]
     doFirst {
         magicspellsGetResources()
     }
